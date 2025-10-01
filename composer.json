@@ -1,0 +1,68 @@
+{
+    "name": "curacel/langfuse-laravel",
+    "description": "A Laravel SDK for the LangFuse API",
+    "keywords": ["langfuse laravel", "langfuse", "LLMs", "PHP", "langfuse sdk"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Damilare Anjorin"
+        }
+    ],
+    "scripts": {
+        "test:stan": ["vendor/bin/phpstan analyse --memory-limit=2G"],
+        "lint": ["vendor/bin/pint --test"],
+        "lint:fix": ["vendor/bin/pint -v"],
+        "test": "pest --colors=always",
+        "ci": [
+            "@lint",
+            "@test:stan",
+            "@test"
+        ]
+    },
+    "scripts-descriptions": {
+        "lint:fix": "Run Laravel Pint code styling.",
+        "lint": "Run Laravel Pint code styling check.",
+        "test:stan": "Run PHPStan against code base.",
+        "test": "Run test suite."
+    },
+    "require": {
+        "php": "^8.1",
+        "illuminate/support": "^10|^11|^12"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.6.12",
+        "orchestra/testbench": "^8",
+        "phpstan/phpstan": "^2.1.22",
+        "laravel/pint": "^1.20",
+        "pestphp/pest": "^v2.36.0",
+        "phpunit/phpunit": "^10|^11"
+    },
+    "autoload": {
+        "psr-4": {
+            "Curacel\\LangFuse\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Curacel\\LangFuse\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Curacel\\LangFuse\\LangFuseServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "preferred-install": "dist",
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
