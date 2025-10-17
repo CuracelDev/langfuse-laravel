@@ -20,7 +20,7 @@ This package helps you:
 ### 1. Publish the Config File
 
 ```bash
-php artisan vendor:publish --provider="CuracelDev\LangfuseLaravel\LangfuseServiceProvider" --tag="langfuse-config"
+php artisan vendor:publish --provider="Curacel\Langfuse\LangfuseServiceProvider" --tag="langfuse-config"
 ```
 
 This will create `config/langfuse.php`.
@@ -72,8 +72,8 @@ Observations can be nested.
 ### 🧠 Example
 
 ```php
-use CuracelDev\LangfuseLaravel\Facades\LangFuse;
-use CuracelDev\LangfuseLaravel\DTO\TraceConfig;
+use Curacel\Langfuse\Facades\LangFuse;
+use Curacel\Langfuse\DTO\TraceConfig;
 use Illuminate\Support\Facades\App;
 
 // Initialize tracing
@@ -110,6 +110,54 @@ $trace->end([
 
 // Sync traces to Langfuse
 $langfuse->syncTraces();
+```
+
+# ✨ Langfuse Prompt Features
+
+## 🧩 Features
+
+- Fetch prompts from Langfuse by name
+- Compile prompts with variables (e.g. `{{ name }}`)
+- Detailed error messages for missing variables
+
+## 🚀 Usage
+
+```php
+use Curacel\Langfuse\Facades\Langfuse;
+
+$langfuse = Langfuse::prompt();
+
+// Get a raw prompt
+echo $langfuse->getPrompt('welcome')->raw();
+
+// Compile a prompt with variables
+echo $langfuse->getPrompt('greeting')->compile(['name' => 'Alice']);
+```
+
+## 📝 Get a Prompt
+
+```php
+$prompt = $langfuse->getPrompt('welcome')->raw();
+// "Hello {{name}}"
+```
+
+## 🧠 Compile a Prompt
+
+```php
+$compiled = $langfuse->getPrompt('greeting')->compile(['name' => 'Alice']);
+// "Hello Alice!"
+```
+
+## ⚠️ Handle Missing Variables
+
+If you compile a prompt without providing all required variables, a `MissingPromptVariablesException` will be thrown.
+
+```php
+try {
+    $langfuse->getPrompt('profile')->compile(['name' => 'John']);
+} catch (Curacel\Langfuse\Exceptions\MissingPromptVariablesException $e) {
+    echo $e->getMessage();
+}
 ```
 
 ## 🧭 Versioning and Stability
