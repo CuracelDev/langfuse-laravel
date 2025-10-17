@@ -13,24 +13,28 @@ final class Prompt
     use Transportable;
 
     /**
-     * @throws NetworkErrorException|MissingPromptVariablesException
+     * @throws NetworkErrorException
      */
-    public function get(string|BackedEnum $name, array|\Closure $variables = [], array|string|null $fallback = null): string|array
-    {
+    public function get(
+        string|BackedEnum $name, ?string $label = null, array|string|null $fallback = ''): PromptRenderer {
         $promptName = $name instanceof BackedEnum ? $name->value : $name;
 
         if (! $this->config->get('langfuse.enabled', true)) {
-            return $fallback;
+            return PromptRenderer::make(promptName: $promptName, promptContent: $fallback);
         }
 
         try {
-            $prompt = $this->send('get', "/api/public/v2/prompts/{$promptName}")->json('prompt');
+            $prompt = $this->send('get', "/api/public/v2/prompts/{$promptName}", options: [
+                'query' => [
+                    ...($label ? ['label' => $label] : [])
+                ]
+            ])->json('prompt');
         } catch (NetworkErrorException $e) {
             if (empty($fallback)) {
                 throw $e;
             }
         }
 
-        return PromptRenderer::make(promptName: $promptName, promptContent: $prompt ?? $fallback)->render($variables);
+        return PromptRenderer::make(promptName: $promptName, promptContent: $prompt ?? $fallback);
     }
 }
