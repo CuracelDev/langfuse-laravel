@@ -38,7 +38,7 @@ class Trace implements TraceContract
 
     private array $scores = [];
 
-//    private bool $isSynced = false;
+    //    private bool $isSynced = false;
 
     /**
      * Creates a new trace
