@@ -160,4 +160,9 @@ trait Transportable
             'last_failure' => null,
         ];
     }
+
+    public function getTransporter(): PendingRequest
+    {
+        return $this->transporter;
+    }
 }
